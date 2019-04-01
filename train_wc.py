@@ -29,7 +29,7 @@ if __name__ == "__main__":
     parser.add_argument('--train_file', default='./data/ner/eng.train', help='path to training file')
     parser.add_argument('--dev_file', default='./data/ner/eng.testa', help='path to development file')
     parser.add_argument('--test_file', default='./data/ner/eng.testb', help='path to test file')
-    parser.add_argument('--gpu', type=int, default=-1, help='gpu id')
+    parser.add_argument('--gpu', type=int, default=1, help='gpu id')
     parser.add_argument('--batch_size', type=int, default=10, help='batch_size')
     parser.add_argument('--unk', default='unk', help='unknow-token in pre-trained embedding')
     parser.add_argument('--char_hidden', type=int, default=300, help='dimension of char-level layers')
@@ -63,8 +63,8 @@ if __name__ == "__main__":
     parser.add_argument('--shrink_embedding', action='store_true', help='shrink the embedding dictionary to corpus (open this if pre-trained embedding dictionary is too large, but disable this may yield better results on external corpus)')
     args = parser.parse_args()
 
-    # if args.gpu >= 0:
-    #     torch.cuda.set_device(args.gpu)
+    if args.gpu >= 0:
+        torch.cuda.set_device(args.gpu)
 
     print('setting:')
     print(args)
