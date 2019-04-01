@@ -26,10 +26,10 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Learning with LM-LSTM-CRF together with Language Model')
     parser.add_argument('--rand_embedding', action='store_true', help='random initialize word embedding')
     parser.add_argument('--emb_file', default='./embedding/glove.6B.100d.txt', help='path to pre-trained embedding')
-    parser.add_argument('--train_file', default='./data/ner/eng.train.iobes', help='path to training file')
-    parser.add_argument('--dev_file', default='./data/ner/eng.testa.iobes', help='path to development file')
-    parser.add_argument('--test_file', default='./data/ner/eng.testb.iobes', help='path to test file')
-    parser.add_argument('--gpu', type=int, default=0, help='gpu id')
+    parser.add_argument('--train_file', default='./data/ner/eng.train', help='path to training file')
+    parser.add_argument('--dev_file', default='./data/ner/eng.testa', help='path to development file')
+    parser.add_argument('--test_file', default='./data/ner/eng.testb', help='path to test file')
+    parser.add_argument('--gpu', type=int, default=-1, help='gpu id')
     parser.add_argument('--batch_size', type=int, default=10, help='batch_size')
     parser.add_argument('--unk', default='unk', help='unknow-token in pre-trained embedding')
     parser.add_argument('--char_hidden', type=int, default=300, help='dimension of char-level layers')
@@ -37,7 +37,7 @@ if __name__ == "__main__":
     parser.add_argument('--drop_out', type=float, default=0.55, help='dropout ratio')
     parser.add_argument('--epoch', type=int, default=200, help='maximum epoch number')
     parser.add_argument('--start_epoch', type=int, default=0, help='start point of epoch')
-    parser.add_argument('--checkpoint', default='./checkpoint/', help='checkpoint path')
+    parser.add_argument('--checkpoint', default='./checkpoint/ner_', help='checkpoint path')
     parser.add_argument('--caseless', action='store_true', help='caseless or not')
     parser.add_argument('--char_dim', type=int, default=30, help='dimension of char embedding')
     parser.add_argument('--word_dim', type=int, default=100, help='dimension of word embedding')
@@ -63,8 +63,8 @@ if __name__ == "__main__":
     parser.add_argument('--shrink_embedding', action='store_true', help='shrink the embedding dictionary to corpus (open this if pre-trained embedding dictionary is too large, but disable this may yield better results on external corpus)')
     args = parser.parse_args()
 
-    if args.gpu >= 0:
-        torch.cuda.set_device(args.gpu)
+    # if args.gpu >= 0:
+    #     torch.cuda.set_device(args.gpu)
 
     print('setting:')
     print(args)
