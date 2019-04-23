@@ -252,8 +252,7 @@ if __name__ == "__main__":
                         'l_map': l_map,
                         'c_map': c_map,
                         'in_doc_words': in_doc_words
-                    }, {'track_list': track_list,
-                        'args': vars(args)
+                    }, {'track_list': track_list
                         }, args.checkpoint_dir + 'cwlm_lstm_crf')
                 except Exception as inst:
                     print(inst)
