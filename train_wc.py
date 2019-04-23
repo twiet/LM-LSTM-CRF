@@ -66,7 +66,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     emb_file = "./embedding/glove.6B.100d.embedding"
-    training_file = "./data/ner/eng.train"
+    train_file = "./data/ner/eng.train"
     dev_file = "./data/ner/eng.testa"
     test_file = "./data/ner/eng.testb"
     args = hp
