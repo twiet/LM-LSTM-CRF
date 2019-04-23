@@ -11,6 +11,8 @@ from model.lm_lstm_crf import *
 import model.utils as utils
 from model.evaluator import eval_wc
 
+from hparams import hparams as hp
+
 import argparse
 import json
 import os
@@ -25,11 +27,11 @@ def eprint(*args, **kwargs):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Learning with LM-LSTM-CRF together with Language Model')
     parser.add_argument('--rand_embedding', action='store_true', help='random initialize word embedding')
-    parser.add_argument('--emb_file', default='./embedding/glove.6B.100d.txt', help='path to pre-trained embedding')
+    parser.add_argument('--emb_file', default='./embedding/glove.6B.100d.embedding', help='path to pre-trained embedding')
     parser.add_argument('--train_file', default='./data/ner/eng.train', help='path to training file')
     parser.add_argument('--dev_file', default='./data/ner/eng.testa', help='path to development file')
     parser.add_argument('--test_file', default='./data/ner/eng.testb', help='path to test file')
-    parser.add_argument('--gpu', type=int, default=1, help='gpu id')
+    parser.add_argument('--gpu', type=int, default=0, help='gpu id')
     parser.add_argument('--batch_size', type=int, default=10, help='batch_size')
     parser.add_argument('--unk', default='unk', help='unknow-token in pre-trained embedding')
     parser.add_argument('--char_hidden', type=int, default=300, help='dimension of char-level layers')
@@ -63,6 +65,11 @@ if __name__ == "__main__":
     parser.add_argument('--shrink_embedding', action='store_true', help='shrink the embedding dictionary to corpus (open this if pre-trained embedding dictionary is too large, but disable this may yield better results on external corpus)')
     args = parser.parse_args()
 
+    emb_file = "./embedding/glove.6B.100d.embedding"
+    training_file = "./data/ner/eng.train"
+    dev_file = "./data/ner/eng.testa"
+    test_file = "./data/ner/eng.testb"
+    args = hp
     if args.gpu >= 0:
         torch.cuda.set_device(args.gpu)
 
@@ -71,11 +78,11 @@ if __name__ == "__main__":
 
     # load corpus
     print('loading corpus')
-    with codecs.open(args.train_file, 'r', 'utf-8') as f:
+    with codecs.open(train_file, 'r', 'utf-8') as f:
         lines = f.readlines()
-    with codecs.open(args.dev_file, 'r', 'utf-8') as f:
+    with codecs.open(dev_file, 'r', 'utf-8') as f:
         dev_lines = f.readlines()
-    with codecs.open(args.test_file, 'r', 'utf-8') as f:
+    with codecs.open(test_file, 'r', 'utf-8') as f:
         test_lines = f.readlines()
 
     dev_features, dev_labels = utils.read_corpus(dev_lines)
@@ -112,7 +119,7 @@ if __name__ == "__main__":
             print('loading embedding')
             if args.fine_tune:  # which means does not do fine-tune
                 f_map = {'<eof>': 0}
-            f_map, embedding_tensor, in_doc_words = utils.load_embedding_wlm(args.emb_file, ' ', f_map, dt_f_set, args.caseless, args.unk, args.word_dim, shrink_to_corpus=args.shrink_embedding)
+            f_map, embedding_tensor, in_doc_words = utils.load_embedding_wlm(emb_file, ' ', f_map, dt_f_set, args.caseless, args.unk, args.word_dim, shrink_to_corpus=args.shrink_embedding)
             print("embedding size: '{}'".format(len(f_map)))
 
         l_set = functools.reduce(lambda x, y: x | y, map(lambda t: set(t), dev_labels))
