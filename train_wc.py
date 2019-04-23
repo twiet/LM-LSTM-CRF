@@ -254,7 +254,7 @@ if __name__ == "__main__":
                         'in_doc_words': in_doc_words
                     }, {'track_list': track_list,
                         'args': vars(args)
-                        }, args.checkpoint + 'cwlm_lstm_crf')
+                        }, args.checkpoint_dir + 'cwlm_lstm_crf')
                 except Exception as inst:
                     print(inst)
 
@@ -298,7 +298,7 @@ if __name__ == "__main__":
                         'in_doc_words': in_doc_words
                     }, {'track_list': track_list,
                         'args': vars(args)
-                        }, args.checkpoint + 'cwlm_lstm_crf')
+                        }, args.checkpoint_dir + 'cwlm_lstm_crf')
                 except Exception as inst:
                     print(inst)
 
@@ -318,9 +318,9 @@ if __name__ == "__main__":
 
     #print best
     if 'f' in args.eva_matrix:
-        eprint(args.checkpoint + ' dev_f1: %.4f dev_rec: %.4f dev_pre: %.4f dev_acc: %.4f test_f1: %.4f test_rec: %.4f test_pre: %.4f test_acc: %.4f\n' % (dev_f1, dev_rec, dev_pre, dev_acc, test_f1, test_rec, test_pre, test_acc))
+        eprint(args.checkpoint_dir + ' dev_f1: %.4f dev_rec: %.4f dev_pre: %.4f dev_acc: %.4f test_f1: %.4f test_rec: %.4f test_pre: %.4f test_acc: %.4f\n' % (dev_f1, dev_rec, dev_pre, dev_acc, test_f1, test_rec, test_pre, test_acc))
     else:
-        eprint(args.checkpoint + ' dev_acc: %.4f test_acc: %.4f\n' % (dev_acc, test_acc))
+        eprint(args.checkpoint_dir + ' dev_acc: %.4f test_acc: %.4f\n' % (dev_acc, test_acc))
 
     # printing summary
     print('setting:')
