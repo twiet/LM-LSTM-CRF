@@ -220,10 +220,10 @@ if __name__ == "__main__":
             for label, (dev_f1, dev_pre, dev_rec, dev_acc, msg) in dev_result.items():
                 print('DEV : %s : dev_f1: %.4f dev_rec: %.4f dev_pre: %.4f dev_acc: %.4f | %s\n' % (label, dev_f1, dev_rec, dev_pre, dev_acc, msg))
             (dev_f1, dev_pre, dev_rec, dev_acc, msg) = dev_result['total']
-
-            track_list.append(
-                    {'loss': epoch_loss, 'dev_f1': dev_f1, 'dev_acc': dev_acc, 'dev_pre': dev_pre,
+            
+            track_item = dict(dev_result.items() | {'loss': epoch_loss, 'dev_f1': dev_f1, 'dev_acc': dev_acc, 'dev_pre': dev_pre,
                      'dev_rec': dev_rec})
+            track_list.append(track_item)
 
             if dev_f1 > best_f1:
                 patience_count = 0
@@ -335,7 +335,6 @@ if __name__ == "__main__":
         'in_doc_words': in_doc_words
     }, {'track_list': track_list
         }, args.checkpoint_dir + 'cwlm_lstm_crf')
-        
     # printing summary
     print('setting:')
     print(args)
