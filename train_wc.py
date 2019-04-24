@@ -217,11 +217,12 @@ if __name__ == "__main__":
 
         if 'f' in args.eva_matrix:
             dev_result = evaluator.calc_score(ner_model, dev_dataset_loader)
-            for label, (dev_f1, dev_pre, dev_rec, dev_acc, msg) in dev_result.items():
+            results = dev_result.items()
+            for label, (dev_f1, dev_pre, dev_rec, dev_acc, msg) in results:
                 print('DEV : %s : dev_f1: %.4f dev_rec: %.4f dev_pre: %.4f dev_acc: %.4f | %s\n' % (label, dev_f1, dev_rec, dev_pre, dev_acc, msg))
             (dev_f1, dev_pre, dev_rec, dev_acc, msg) = dev_result['total']
-            
-            track_item = dict(dev_result.items() | {'loss': epoch_loss, 'dev_f1': dev_f1, 'dev_acc': dev_acc, 'dev_pre': dev_pre,
+
+            track_item = dict(results | {'loss': epoch_loss, 'dev_f1': dev_f1, 'dev_acc': dev_acc, 'dev_pre': dev_pre,
                      'dev_rec': dev_rec})
             track_list.append(track_item)
 
