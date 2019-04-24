@@ -65,7 +65,7 @@ if __name__ == "__main__":
     parser.add_argument('--shrink_embedding', action='store_true', help='shrink the embedding dictionary to corpus (open this if pre-trained embedding dictionary is too large, but disable this may yield better results on external corpus)')
     args = parser.parse_args()
 
-    emb_file = "./embedding/glove.6B.100d.embedding"
+    emb_file = "./embedding/glove.6B.10d.embedding"
     train_file = "./data/ner/eng.train"
     dev_file = "./data/ner/eng.testa"
     test_file = "./data/ner/eng.testb"
@@ -207,6 +207,7 @@ if __name__ == "__main__":
             loss.backward()
             nn.utils.clip_grad_norm_(ner_model.parameters(), args.clip_grad)
             optimizer.step()
+            break
         epoch_loss /= tot_length
 
         # update lr
@@ -217,14 +218,11 @@ if __name__ == "__main__":
 
         if 'f' in args.eva_matrix:
             dev_result = evaluator.calc_score(ner_model, dev_dataset_loader)
-            results = dev_result.items()
-            for label, (dev_f1, dev_pre, dev_rec, dev_acc, msg) in results:
+            for label, (dev_f1, dev_pre, dev_rec, dev_acc, msg) in dev_result.items():
                 print('DEV : %s : dev_f1: %.4f dev_rec: %.4f dev_pre: %.4f dev_acc: %.4f | %s\n' % (label, dev_f1, dev_rec, dev_pre, dev_acc, msg))
             (dev_f1, dev_pre, dev_rec, dev_acc, msg) = dev_result['total']
-
-            track_item = dict(results | {'loss': epoch_loss, 'dev_f1': dev_f1, 'dev_acc': dev_acc, 'dev_pre': dev_pre,
-                     'dev_rec': dev_rec})
-            track_list.append(track_item)
+    
+            track_list.append(dev_result)
 
             if dev_f1 > best_f1:
                 patience_count = 0
