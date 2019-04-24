@@ -65,7 +65,7 @@ if __name__ == "__main__":
     parser.add_argument('--shrink_embedding', action='store_true', help='shrink the embedding dictionary to corpus (open this if pre-trained embedding dictionary is too large, but disable this may yield better results on external corpus)')
     args = parser.parse_args()
 
-    emb_file = "./embedding/glove.6B.10d.embedding"
+    emb_file = "./embedding/glove.6B.100d.embedding"
     train_file = "./data/ner/eng.train"
     dev_file = "./data/ner/eng.testa"
     test_file = "./data/ner/eng.testb"

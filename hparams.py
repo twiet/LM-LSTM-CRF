@@ -2,7 +2,7 @@ class hparams:
     checkpoint_dir = "./checkpoint/"
     load_check_point = False
     rand_embedding = False
-    gpu = -1
+    gpu = 0
     batch_size = 10
     unk = "unk"
     char_hidden = 300
