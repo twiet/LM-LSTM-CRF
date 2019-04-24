@@ -221,6 +221,10 @@ if __name__ == "__main__":
                 print('DEV : %s : dev_f1: %.4f dev_rec: %.4f dev_pre: %.4f dev_acc: %.4f | %s\n' % (label, dev_f1, dev_rec, dev_pre, dev_acc, msg))
             (dev_f1, dev_pre, dev_rec, dev_acc, msg) = dev_result['total']
 
+            track_list.append(
+                    {'loss': epoch_loss, 'dev_f1': dev_f1, 'dev_acc': dev_acc, 'dev_pre': dev_pre,
+                     'dev_rec': dev_rec})
+
             if dev_f1 > best_f1:
                 patience_count = 0
                 best_f1 = dev_f1
@@ -230,9 +234,9 @@ if __name__ == "__main__":
                     print('TEST : %s : test_f1: %.4f test_rec: %.4f test_pre: %.4f test_acc: %.4f | %s\n' % (label, test_f1, test_rec, test_pre, test_acc, msg))
                 (test_f1, test_rec, test_pre, test_acc, msg) = test_result['total']
 
-                track_list.append(
-                    {'loss': epoch_loss, 'dev_f1': dev_f1, 'dev_acc': dev_acc, 'test_f1': test_f1,
-                     'test_acc': test_acc})
+                # track_list.append(
+                #     {'loss': epoch_loss, 'dev_f1': dev_f1, 'dev_acc': dev_acc, 'test_f1': test_f1,
+                #      'test_acc': test_acc})
 
                 print(
                     '(loss: %.4f, epoch: %d, dev F1 = %.4f, dev acc = %.4f, F1 on test = %.4f, acc on test= %.4f), saving...' %
@@ -320,7 +324,18 @@ if __name__ == "__main__":
         eprint(args.checkpoint_dir + ' dev_f1: %.4f dev_rec: %.4f dev_pre: %.4f dev_acc: %.4f test_f1: %.4f test_rec: %.4f test_pre: %.4f test_acc: %.4f\n' % (dev_f1, dev_rec, dev_pre, dev_acc, test_f1, test_rec, test_pre, test_acc))
     else:
         eprint(args.checkpoint_dir + ' dev_acc: %.4f test_acc: %.4f\n' % (dev_acc, test_acc))
-
+    
+    utils.save_checkpoint({
+        'epoch': args.start_epoch,
+        'state_dict': ner_model.state_dict(),
+        'optimizer': optimizer.state_dict(),
+        'f_map': f_map,
+        'l_map': l_map,
+        'c_map': c_map,
+        'in_doc_words': in_doc_words
+    }, {'track_list': track_list
+        }, args.checkpoint_dir + 'cwlm_lstm_crf')
+        
     # printing summary
     print('setting:')
     print(args)
